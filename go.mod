@@ -1,6 +1,6 @@
-module github.com/beltran/gohive
+module github.com/eMAGTechLabs/gohive
 
-go 1.14
+go 1.15
 
 require (
 	github.com/apache/thrift v0.14.1
