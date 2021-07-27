@@ -1,13 +1,11 @@
 # GoHive
-[![Build Status](https://travis-ci.com/beltran/gohive.svg?branch=master)](https://travis-ci.com/beltran/gohive) [![Coverage Status](https://coveralls.io/repos/github/beltran/gohive/badge.svg?branch=master)](https://coveralls.io/github/beltran/gohive?branch=master)
-
 
 GoHive is a driver for Hive and the [Spark Distributed SQL Engine](https://spark.apache.org/docs/latest/sql-distributed-sql-engine.html) in go that supports connection mechanisms KERBEROS(Gssapi Sasl), NONE(Plain Sasl), LDAP, CUSTOM and NOSASL, both for binary and http transport, with and without SSL. The kerberos mechanism will pick a different authentication level depending on `hive.server2.thrift.sasl.qop`.
 
 ## Installation
 Gohive can be installed with:
 ```
-go get github.com/beltran/gohive
+go get github.com/eMAGTechLabs/gohive
 ```
 
 To add kerberos support gohive requires header files to build against the GSSAPI C library. They can be installed with:
@@ -17,7 +15,18 @@ To add kerberos support gohive requires header files to build against the GSSAPI
 
 Then:
 ```
-go get -tags kerberos github.com/beltran/gohive
+go get -tags kerberos github.com/eMAGTechLabs/gohive
+```
+
+## Connecting to Impala using Kerberos
+
+```go
+configuration := NewConnectConfiguration()
+configuration.Service = "impala"
+configuration.TLSConfig = &tls.Config{}
+// Previously kinit should have done: kinit -kt ./secret.keytab hive/hs2.example.com@EXAMPLE.COM
+connection, errConn := Connect("impala.example.com", 21050, "KERBEROS", configuration)
+
 ```
 
 ## Quickstart
