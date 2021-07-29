@@ -16,8 +16,8 @@ import (
 	"time"
 
 	"github.com/apache/thrift/lib/go/thrift"
-	"github.com/beltran/gohive/hiveserver"
 	"github.com/beltran/gosasl"
+	"github.com/eMAGTechLabs/gohive/hiveserver"
 	"github.com/go-zookeeper/zk"
 	"github.com/pkg/errors"
 )
@@ -533,9 +533,14 @@ func (c *Cursor) executeAsync(ctx context.Context, query string) {
 		return
 	}
 	if !success(responseExecute.GetStatus()) {
+		e := responseExecute.Status.ErrorCode
+		if e == nil {
+			var d int32
+			e = &d
+		}
 		c.Err = HiveError{
 			error:     errors.New("Error while executing query: " + responseExecute.Status.String()),
-			ErrorCode: int(*responseExecute.Status.ErrorCode),
+			ErrorCode: int(*e),
 		}
 		return
 	}
